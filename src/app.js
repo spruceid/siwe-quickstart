@@ -1,5 +1,6 @@
 const http = require('http')
 const fs = require('fs')
+const siwe = require('siwe')
 
 // make sure the data directory exists
 try {
@@ -17,8 +18,9 @@ const defaultText = 'Greetings!'
 const port = 8888
 
 function load (response, payload) {
-  const fileName = qualify('file.txt')
-  readFile(fileName)
+  parseAndValidateSiweMessage(payload.message, payload.signature)
+    .then(message => qualify(message.address))
+    .then(fileName => readFile(fileName))
     .then((content) => {
       response
         .writeHead(200, {
@@ -35,8 +37,9 @@ function load (response, payload) {
 
 function save (response, payload) {
   const content = payload.content || ''
-  const fileName = qualify('file.txt')
-  writeFile(fileName, content)
+  parseAndValidateSiweMessage(payload.message, payload.signature)
+    .then(message => qualify(message.address))
+    .then(fileName => writeFile(fileName, content))
     .then(() => {
       response
         .writeHead(200, {
@@ -48,6 +51,35 @@ function save (response, payload) {
       console.error(err)
       internalServerError(response)
     })
+}
+
+async function signIn (response, payload) {
+  try {
+    const message = await parseAndValidateSiweMessage(payload.message, payload.signature)
+    const fileName = qualify(message.address)
+    await fs.promises.access(fileName)
+      .then(
+        () => readFile(fileName),
+        () => createDefaultFile(fileName).then(() => defaultText)
+      )
+      .then((content) => {
+        response
+          .writeHead(200, {
+            'Content-Type': 'text/plain',
+            'Access-Control-Allow-Origin': '*'
+          })
+          .end(content)
+      })
+  } catch (err) {
+    console.error(err)
+    internalServerError(response)
+  }
+}
+
+function parseAndValidateSiweMessage (rawMessage, signature) {
+  const message = new siwe.SiweMessage(rawMessage)
+  message.signature = signature
+  return message.validate()
 }
 
 function qualify (fileName) {
@@ -96,6 +128,12 @@ http.createServer((request, response) => {
       // if the action is save, store the content in the local file
       } else if (payload.action === 'save') {
         save(response, payload)
+
+      // if the action is signIn, create the default file if the user
+      // does not already have a file, and then send the content of
+      // the file to the frontend
+      } else if (payload.action === 'signIn') {
+        signIn(response, payload)
 
       // reject any other actions
       } else {
