@@ -1,3 +1,131 @@
-body {
- font-size: 10px 
+:root {
+  --white: #FFFFFF;
+  --dark: #333;
+  --black: #000000;
+  --grey: #ACACAC;
+}
+
+html {
+  font-size: 10px;
+  font-family: 'Inter', sans-serif;
+}
+
+.body {
+  margin: 0rem;
+  padding: 0rem;
+  height: 100vh;
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--dark);
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  line-height: 1.2;
+}
+
+.wrap {
+  background: var(--white);
+  box-shadow: 0rem 0.4rem 0.4rem rgba(0, 0, 0, 0.25);
+  border-radius: 1rem;
+  padding: 4rem 2rem 2rem;
+  height: 50rem;
+  max-width: 35rem;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  @media(max-width: 380px) {
+    max-width: 29rem;
+  }
+
+  &-connect {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+
+    .text-center {
+      text-align: center;
+    }
+
+    p {
+      max-width: 27.8rem;
+      width: 100%;
+      margin-left: auto;
+      margin-right: auto;
+      font-weight: 500;
+      font-size: 1.5rem;
+      line-height: 1.4;
+      letter-spacing: -0.03em;
+      color: var(--black);
+    }
+  }
+}
+
+h1 {
+  font-weight: bold;
+  font-size: 2rem;
+  letter-spacing: -0.03em;
+  color: var(--black);
+  line-height: 2;
+}
+
+.logo {
+  width: 5rem;
+  height: 8.8rem;
+  margin-left: auto;
+  margin-right: auto;
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    object-position: center;
+  }
+}
+
+.btn {
+  background-color: var(--white);
+  border: 0.02rem solid var(--grey);
+  box-shadow: 0rem 0.1rem 0.4rem rgba(0, 0, 0, 0.25);
+  border-radius: 0.5rem;
+  margin-bottom: 3.2rem;
+  max-width: 25rem;
+  width: 100%;
+  height: 5.6rem;
+  font-weight: 500;
+  font-size: 1.6rem;
+  line-height: 1.2;
+  color: var(--black);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  .flex {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  span {
+    width: 2.4rem;
+    height: 3.8rem;
+    margin-right: 2.4rem;
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-position: center;
+      object-fit: contain;
+    }
+  }
+
+  &-wrap {
+    margin-top: auto;
+    display: flex;
+    justify-content: center;
+  }
 }
