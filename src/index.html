@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SIWE Quickstart</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    .body {
+      margin: 0px;
+      min-height: 100vh;
+      height: 100%;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background-image: url('/images/bg-image.png');
+      background-color: #333;
+      background-position: center;
+      background-size: cover;
+      background-repeat: no-repeat;
+      line-height: 1.2;
+      font-family: 'Inter', sans-serif;
+    }
+
+    .wrap {
+      background: #FFFFFF;
+      box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+      border-radius: 10px;
+      padding: 40px 20px 20px;
+      height: 500px;
+      min-width: 350px;
+    }
+
+    h1 {
+      font-weight: bold;
+      font-size: 20px;
+      letter-spacing: -0.03em;
+      color: #000000;
+      line-height: 2;
+    }
+  </style>
+</head>
+
+<body class="body">
+  <div class="wrap">
+    <div>
+      <div class="logo">
+        <img src="/images/logo.png" alt="#">
+      </div>
+      <h1>SIWE Quickstart</h1>
+    </div>
+    <div><button id='connectWalletBtn'>Connect wallet</button></div>
+    <div><button id='siweBtn' style="display:none">Sign-in with Ethereum</button></div>
+    <div>
+      <h2 id='loggedInUser'></h2><img id='ensAvatar' width='100px'></img>
+    </div>
+    <div id='app' style="display:none">
+      <div>
+        <input id='input' type='text'></input>
+      </div>
+      <div>
+        <button id='saveBtn'>save</button>
+        <button id='loadBtn'>load</button>
+      </div>
+    </div>
+  </div>
+</body>
+
+</html>

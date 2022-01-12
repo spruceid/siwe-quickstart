@@ -1,5 +1,6 @@
 import { ethers } from 'ethers'
 import { SiweMessage } from 'siwe'
+import './scss/style.scss';
 
 const input = document.getElementById('input')
 const saveBtn = document.getElementById('saveBtn')
