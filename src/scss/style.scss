@@ -195,6 +195,8 @@ h1 {
       margin: 0rem;
       font-size: 1.5rem;
       font-weight: 500;
+      display: flex;
+      align-items: center;
 
       span {
         font-weight: bold;
@@ -213,6 +215,25 @@ h1 {
       object-fit: contain;
       object-position: center;
       border-radius: 50%;
+    }
+  }
+}
+
+.logged-in{
+  &__img {
+    margin-left: 0rem;
+    margin-right: 0.8rem;
+    width: 2.4rem;
+    height: 2.4rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      object-position: center;
     }
   }
 }

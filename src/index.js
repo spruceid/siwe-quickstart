@@ -79,10 +79,11 @@ async function signInWithEthereum () {
         document.querySelector('.logged-wrap').style.display = 'flex';
         document.querySelector('.changed-text').innerHTML = 'Try typing in and saving some text!'
         if (ensName === null) {
-          loggedInUser.innerHTML = `Logged in as: <span>${address.slice(0,5)} ... ${address.slice(-4)}</span>`
+          loggedInUser.innerHTML = `<span class="logged-in__img"><img src="/images/icon-connection.svg" alt="#"></span> <span class="logged-in__adress">${address.slice(0,5)} ... ${address.slice(-4)}</span>`
           document.querySelector('.logged-wrap__img').style.display = 'none'
+
         } else {
-          loggedInUser.innerHTML = `Logged in as: ${ensName}`
+          loggedInUser.innerHTML = `${ensName}`
           ensAvatar.src = `https://metadata.ens.domains/mainnet/avatar/${ensName}`
         }
       }, () => console.log('failed to get active address'))
