@@ -75,9 +75,12 @@ async function signInWithEthereum () {
         const ensName = await provider.lookupAddress(address)
         input.value = await response.text()
         siweBtn.style.display = 'none'
-        appDiv.style.display = 'block'
+        appDiv.style.display = 'flex';
+        document.querySelector('.logged-wrap').style.display = 'flex';
+        document.querySelector('.changed-text').innerHTML = 'Try typing in and saving some text!'
         if (ensName === null) {
-          loggedInUser.innerHTML = `Logged in as: ${address}`
+          loggedInUser.innerHTML = `Logged in as: <span>${address.slice(0,5)} ... ${address.slice(-4)}</span>`
+          document.querySelector('.logged-wrap__img').style.display = 'none'
         } else {
           loggedInUser.innerHTML = `Logged in as: ${ensName}`
           ensAvatar.src = `https://metadata.ens.domains/mainnet/avatar/${ensName}`

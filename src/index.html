@@ -18,7 +18,7 @@
           <img src="/images/logo.svg" alt="#">
         </div>
         <h1>Sign-In with Ethereum Quickstart</h1>
-        <p>Connect Your Wallet and Sign-In with Ethereum to Continue</p>
+        <p class="changed-text">Connect Your Wallet and Sign-In with Ethereum to Continue</p>
       </div>
   
       <div class="btn-wrap">
@@ -29,20 +29,25 @@
              Sign-in with Ethereum
           </div> 
         </button>
+
+        <div class="logged-wrap">
+          <div class="logged-wrap__name">
+            <h2 id='loggedInUser'></h2>
+            <img id='ensAvatar' class="logged-wrap__img"></img>
+          </div>
+          <div class="app" id='app' style="display:none">
+            <div class="text-field">
+              <textarea class="text-field__input" id='input' type='text'></textarea>
+            </div>
+            <div class="btn-wrap__small">
+              <button class="app-btn" id='saveBtn'>save</button>
+              <button class="app-btn" id='loadBtn'>load</button>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
-    <div>
-      <h2 id='loggedInUser'></h2><img id='ensAvatar' width='100px'></img>
-    </div>
-    <div id='app' style="display:none">
-      <div>
-        <input id='input' type='text'></input>
-      </div>
-      <div>
-        <button id='saveBtn'>save</button>
-        <button id='loadBtn'>load</button>
-      </div>
-    </div>
+    
   </div>
 </body>
 
