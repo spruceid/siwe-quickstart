@@ -12,6 +12,10 @@ const siweBtn = document.getElementById('siweBtn')
 const loggedInUser = document.getElementById('loggedInUser')
 const ensAvatar = document.getElementById('ensAvatar')
 
+const loggedWrap = document.querySelector('.logged-wrap');
+const loggedWrapImg = document.querySelector('.logged-wrap__img');
+const changedText = document.querySelector('.changed-text');
+
 saveBtn.onclick = save
 loadBtn.onclick = load
 connectWalletBtn.onclick = connectWallet
@@ -76,11 +80,28 @@ async function signInWithEthereum () {
         input.value = await response.text()
         siweBtn.style.display = 'none'
         appDiv.style.display = 'flex';
-        document.querySelector('.logged-wrap').style.display = 'flex';
-        document.querySelector('.changed-text').innerHTML = 'Try typing in and saving some text!'
+        loggedWrap.style.display = 'flex';
+        changedText.innerHTML = 'Try typing in and saving some text!'
+
         if (ensName === null) {
-          loggedInUser.innerHTML = `<span class="logged-in__img"><img src="/images/icon-connection.svg" alt="#"></span> <span class="logged-in__adress">${address.slice(0,5)} ... ${address.slice(-4)}</span>`
-          document.querySelector('.logged-wrap__img').style.display = 'none'
+          const copyBtn = document.createElement('span');
+
+          copyBtn.onclick = function() {
+            navigator.clipboard.writeText(address)
+          }
+
+          copyBtn.innerHTML =  '<img src="/images/icon-connection.svg" alt="#">';
+          copyBtn.classList.add('logged-in__img');
+
+          loggedInUser.appendChild(copyBtn);
+
+          const addressElement = document.createElement('span');
+          addressElement.innerHTML = `${address.slice(0,5)} ... ${address.slice(-4)}`
+          addressElement.classList.add('logged-in__adress');
+
+          loggedInUser.appendChild(addressElement);
+           
+          loggedWrapImg.style.display = 'none'
 
         } else {
           loggedInUser.innerHTML = `${ensName}`
