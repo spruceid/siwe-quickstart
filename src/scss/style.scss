@@ -220,7 +220,7 @@ h1 {
   }
 }
 
-.logged-in{
+.logged-in {
   &__img {
     margin-left: 0rem;
     margin-right: 0.8rem;
@@ -229,7 +229,7 @@ h1 {
     display: flex;
     align-items: center;
     justify-content: center;
-  
+
     img {
       width: 100%;
       height: 100%;
@@ -293,5 +293,32 @@ h1 {
     &::placeholder {
       color: var(--grey-1);
     }
+  }
+}
+
+.alert {
+  display: none;
+  position: fixed;
+  top: 2rem;
+  left: 0rem;
+  width: 100%;
+
+  &-text {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    width: fit-content;
+    margin-left: auto;
+    margin-right: auto;
+    font-weight: 500;
+    font-size: 1.6rem;
+    padding: 1.2rem 2rem;
+    line-height: 1.4;
+    background-color: var(--white);
+    color: var(--black);
+    box-shadow: 0rem 0.1rem 0.4rem rgba(0, 0, 0, 0.25);
+    border: 0.02rem solid var(--grey);
+    border-radius: 0.5rem;
   }
 }

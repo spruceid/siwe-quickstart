@@ -56,6 +56,14 @@ async function createSiweMessage (statement) {
 }
 
 async function signInWithEthereum () {
+
+  const network = await signer.provider.getNetwork();
+
+  if(network.chainId !== 1) {
+    document.querySelector('.alert').style.display = 'flex';
+    return
+  }
+
   const message = await createSiweMessage('Sign in with Ethereum to the app.')
 
   const signature = await signer.signMessage(message)
