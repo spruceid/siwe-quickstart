@@ -66,10 +66,6 @@ document.querySelector('.disconnect').addEventListener('click', () => {
 
 function signOut () {
   location.reload();
-  // signer.provider.provider._handleDisconnect();
-  // connectWalletBtn.style.display = 'flex'
-  // siweBtn.style.display = 'none';
-  // loggedWrap.style.display = 'none'
 }
 
 async function signInWithEthereum () {
