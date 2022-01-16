@@ -25,20 +25,28 @@
         <h1>Sign-In with Ethereum Quickstart</h1>
         <p class="changed-text">Connect Your Wallet and Sign-In with Ethereum to Continue</p>
       </div>
-  
+
       <div class="btn-wrap">
         <button class="btn btn-connect" id='connectWalletBtn'>Connect wallet</button>
-        <button class="btn btn-connect" id='siweBtn' style="display:none"> 
+        <button class="btn btn-connect" id='siweBtn' style="display:none">
           <div class="flex">
             <span><img src="/images/ethereum-btn.png" alt="#"></span>
-             Sign-in with Ethereum
-          </div> 
+            Sign-in with Ethereum
+          </div>
         </button>
 
         <div class="logged-wrap">
-          <div class="logged-wrap__name">
-            <h2 id='loggedInUser'></h2>
-            <img id='ensAvatar' class="logged-wrap__img"></img>
+          <div class="logged-wrap__top">
+            <div class="logged-wrap__name">
+              <h2 id='loggedInUser'></h2>
+              <img id='ensAvatar' class="logged-wrap__img"></img>
+            </div>
+            <div class="disconnect">
+              <img src="/images/settings.png" class="disconnect-img" alt="#">
+              <div class="disconnect-btn">
+                Disconnect
+              </div>
+            </div>
           </div>
           <div class="app" id='app' style="display:none">
             <div class="text-field">
@@ -52,7 +60,7 @@
         </div>
       </div>
     </div>
-    
+
   </div>
 </body>
 

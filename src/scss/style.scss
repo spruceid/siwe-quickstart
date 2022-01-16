@@ -52,7 +52,7 @@ button {
   box-shadow: 0rem 0.4rem 0.4rem rgba(0, 0, 0, 0.25);
   border-radius: 1rem;
   padding: 4rem 2rem 2rem;
-  height: 50rem;
+  height: 52rem;
   max-width: 35rem;
   width: 100%;
   display: flex;
@@ -172,6 +172,14 @@ h1 {
   display: none;
   width: 100%;
 
+  &__top {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
   &__name {
     display: flex;
     align-items: center;
@@ -188,8 +196,7 @@ h1 {
     line-height: 1.4;
     letter-spacing: -0.03em;
     color: var(--black);
-    margin-left: auto;
-    margin-right: auto;
+    position: relative;
 
     h2 {
       margin: 0rem;
@@ -209,33 +216,20 @@ h1 {
     width: 1.8rem;
     height: 1.8rem;
     margin-left: 1.4rem;
-
-    img {
-      width: 100%;
-      height: 100%;
-      object-fit: contain;
-      object-position: center;
-      border-radius: 50%;
-    }
+    object-fit: contain;
+    object-position: center;
+    border-radius: 50%;
   }
 }
 
 .logged-in {
   &__img {
-    margin-left: 0rem;
-    margin-right: 0.8rem;
-    width: 3.2rem;
-    height: 3.2rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    img {
-      width: 100%;
-      height: 100%;
-      object-fit: contain;
-      object-position: center;
-    }
+    position: absolute;
+    content: '';
+    top: 0rem;
+    left: 0rem;
+    width: 100%;
+    height: 100%;
   }
 }
 
@@ -282,7 +276,7 @@ h1 {
     border-radius: 0rem;
     resize: none;
     height: 13.8rem;
-    color: var(--black);
+    color: var(--grey-1);
     font-weight: 500;
     font-size: 1.2rem;
     line-height: 1.4;
@@ -320,5 +314,58 @@ h1 {
     box-shadow: 0rem 0.1rem 0.4rem rgba(0, 0, 0, 0.25);
     border: 0.02rem solid var(--grey);
     border-radius: 0.5rem;
+  }
+}
+
+.disconnect {
+  margin-left: 1.6rem;
+  background: var(--white);
+  border: 0.1rem solid var(--border);
+  box-sizing: border-box;
+  border-radius: 0.5rem;
+  padding: 1.1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+
+  &-img {
+    width: 1.8rem;
+    height: 1.8rem;
+    object-fit: contain;
+    object-position: center;
+  }
+
+  &-btn {
+    padding: 1rem 1.8rem;
+    background: var(--white);
+    border: 0.1rem solid var(--border);
+    box-sizing: border-box;
+    border-radius: 0.5rem;
+    height: 4rem;
+    width: 14.6rem;
+    text-align: center;
+    font-weight: 500;
+    font-size: 1.5rem;
+    line-height: 1.4;
+    letter-spacing: -0.03em;
+    color: var(--black);
+    position: absolute;
+    content: '';
+    right: 0rem;
+    bottom: calc(-100% - 0.4rem);
+    cursor: pointer;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.35s;
+    &.show {
+      display: flex;
+    }
+
+    &:hover {
+      background-color: var(--dark);
+      color: var(--white);
+    }
   }
 }

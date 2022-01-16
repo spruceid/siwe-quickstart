@@ -16,10 +16,15 @@ const loggedWrap = document.querySelector('.logged-wrap');
 const loggedWrapImg = document.querySelector('.logged-wrap__img');
 const changedText = document.querySelector('.changed-text');
 
+const disconnectBtn = document.querySelector('.disconnect-btn');
+
 saveBtn.onclick = save
 loadBtn.onclick = load
 connectWalletBtn.onclick = connectWallet
 siweBtn.onclick = signInWithEthereum
+
+disconnectBtn.onclick = signOut
+
 ensAvatar.onerror = function () { 
   console.log('user does not have an ensAvatar')
   ensAvatar.style.display = 'none' 
@@ -53,6 +58,18 @@ async function createSiweMessage (statement) {
     version: '1',
     chainId: '1'
   }).signMessage()
+}
+
+document.querySelector('.disconnect').addEventListener('click', () => {
+  disconnectBtn.classList.toggle('show');
+});
+
+function signOut () {
+  location.reload();
+  // signer.provider.provider._handleDisconnect();
+  // connectWalletBtn.style.display = 'flex'
+  // siweBtn.style.display = 'none';
+  // loggedWrap.style.display = 'none'
 }
 
 async function signInWithEthereum () {
@@ -98,7 +115,7 @@ async function signInWithEthereum () {
             navigator.clipboard.writeText(address)
           }
 
-          copyBtn.innerHTML =  '<img src="/images/icon-connection.svg" alt="#">';
+          copyBtn.innerHTML =  '';
           copyBtn.classList.add('logged-in__img');
 
           loggedInUser.appendChild(copyBtn);
