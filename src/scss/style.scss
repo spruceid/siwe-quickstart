@@ -197,6 +197,7 @@ h1 {
     letter-spacing: -0.03em;
     color: var(--black);
     position: relative;
+    cursor: pointer;
 
     h2 {
       margin: 0rem;
@@ -216,8 +217,8 @@ h1 {
     width: 1.8rem;
     height: 1.8rem;
     margin-left: 1.4rem;
-    object-fit: contain;
-    object-position: center;
+    object-fit: cover;
+    object-position: top;
     border-radius: 50%;
   }
 }
@@ -276,7 +277,7 @@ h1 {
     border-radius: 0rem;
     resize: none;
     height: 13.8rem;
-    color: var(--grey-1);
+    color: var(--black);
     font-weight: 500;
     font-size: 1.2rem;
     line-height: 1.4;
@@ -328,6 +329,7 @@ h1 {
   align-items: center;
   justify-content: center;
   position: relative;
+  cursor: pointer;
 
   &-img {
     width: 1.8rem;
