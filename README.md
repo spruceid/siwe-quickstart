@@ -1,3 +1,3 @@
 # siwe-quickstart
 
-This repo contains an example webapp that you can convert to use SIWE. Clone this repository and follow the steps on [docs.login.xyz](docs.login.xyz).
+This branch contains the finished quickstart example. If you want to see how we made this then follow the steps on [docs.login.xyz](docs.login.xyz).

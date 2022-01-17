@@ -30,16 +30,17 @@ ensAvatar.onerror = function () {
   ensAvatar.style.display = 'none' 
 }
 
+const domain = window.location.hostname
 const provider = new ethers.providers.Web3Provider(window.ethereum)
 const signer = provider.getSigner()
-const domain = window.location.hostname
 
 function connectWallet () {
   provider.send('eth_requestAccounts', [])
-    .then(_ => {
+    .then(() => {
       connectWalletBtn.style.display = 'none'
       siweBtn.style.display = 'block'
-    }, () => console.log('user rejected request'))
+    })
+    .catch(() => console.log('user rejected request'))
 }
 
 async function checkWalletIsConnected () {
@@ -77,7 +78,7 @@ async function signInWithEthereum () {
     return
   }
 
-  const message = await createSiweMessage('Sign in with Ethereum to the app.')
+  const message = await createSiweMessage(await signer.getAddress(), 'Sign in with Ethereum to the app.')
 
   const signature = await signer.signMessage(message)
 
@@ -136,7 +137,7 @@ async function signInWithEthereum () {
 }
 
 async function load () {
-  const message = await createSiweMessage('Load your previously saved input.')
+  const message = createSiweMessage(await signer.getAddress(), 'Load your previously saved input.')
 
   const signature = await signer.signMessage(message)
 
@@ -159,7 +160,7 @@ async function load () {
 }
 
 async function save () {
-  const message = await createSiweMessage('Save your current input.')
+  const message = createSiweMessage(await signer.getAddress(), 'Save your current input.')
 
   const signature = await signer.signMessage(message)
 
@@ -177,6 +178,17 @@ async function save () {
   }
 
   window.fetch('http://localhost:8888', options)
+}
+
+function createSiweMessage (address, statement) {
+  return new SiweMessage({
+    domain,
+    address,
+    statement,
+    uri: 'http://' + domain,
+    version: '1',
+    chainId: '1'
+  }).signMessage()
 }
 
 checkWalletIsConnected()
