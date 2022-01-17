@@ -50,17 +50,6 @@ async function checkWalletIsConnected () {
   }
 }
 
-async function createSiweMessage (statement) {
-  return new SiweMessage({
-    domain,
-    address: await signer.getAddress(),
-    statement,
-    uri: 'http://' + domain,
-    version: '1',
-    chainId: '1'
-  }).signMessage()
-}
-
 document.querySelector('.disconnect').addEventListener('click', () => {
   disconnectBtn.classList.toggle('show');
 });
@@ -78,7 +67,7 @@ async function signInWithEthereum () {
     return
   }
 
-  const message = await createSiweMessage(await signer.getAddress(), 'Sign in with Ethereum to the app.')
+  const message = createSiweMessage(await signer.getAddress(), 'Sign in with Ethereum to the app.')
 
   const signature = await signer.signMessage(message)
 
