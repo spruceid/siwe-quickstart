@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SIWE Quickstart</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+
+<body class="body" style="background-image: url('/images/bg-image.png')">
+  <div class="alert">
+    <div class="alert-text">
+      You use wrong network, connect to Ethereum to Continue
+    </div>
+  </div>
+  <div class="wrap">
+    <div class="wrap-connect">
+      <div class="text-center">
+        <div class="logo">
+          <img src="/images/logo.svg" alt="#">
+        </div>
+        <h1>Sign-In with Ethereum Quickstart</h1>
+        <p class="changed-text">Connect Your Wallet and Sign-In with Ethereum to Continue</p>
+      </div>
+
+      <div class="btn-wrap">
+        <button class="btn btn-connect" id='connectWalletBtn'>Connect wallet</button>
+        <button class="btn btn-connect" id='siweBtn' style="display:none">
+          <div class="flex">
+            <span><img src="/images/ethereum-btn.png" alt="#"></span>
+            Sign-in with Ethereum
+          </div>
+        </button>
+
+        <div class="logged-wrap">
+          <div class="logged-wrap__top">
+            <div class="logged-wrap__name">
+              <h2 id='loggedInUser'></h2>
+              <img id='ensAvatar' class="logged-wrap__img"></img>
+            </div>
+            <div class="disconnect">
+              <img src="/images/settings.png" class="disconnect-img" alt="#">
+              <div class="disconnect-btn">
+                Disconnect
+              </div>
+            </div>
+          </div>
+          <div class="app" id='app' style="display:none">
+            <div class="text-field">
+              <textarea class="text-field__input" id='input' placeholder="Type something in here and save it!" type='text'></textarea>
+            </div>
+            <div class="btn-wrap__small">
+              <button class="app-btn" id='saveBtn'>save</button>
+              <button class="app-btn" id='loadBtn'>load</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</body>
+
+</html>
