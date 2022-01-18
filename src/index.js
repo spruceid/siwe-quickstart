@@ -1,5 +1,6 @@
 import { ethers } from 'ethers'
 import { SiweMessage } from 'siwe'
+import './scss/style.scss';
 
 const input = document.getElementById('input')
 const saveBtn = document.getElementById('saveBtn')
@@ -11,10 +12,19 @@ const siweBtn = document.getElementById('siweBtn')
 const loggedInUser = document.getElementById('loggedInUser')
 const ensAvatar = document.getElementById('ensAvatar')
 
+const loggedWrap = document.querySelector('.logged-wrap');
+const loggedWrapImg = document.querySelector('.logged-wrap__img');
+const changedText = document.querySelector('.changed-text');
+
+const disconnectBtn = document.querySelector('.disconnect-btn');
+
 saveBtn.onclick = save
 loadBtn.onclick = load
 connectWalletBtn.onclick = connectWallet
 siweBtn.onclick = signInWithEthereum
+
+disconnectBtn.onclick = signOut
+
 ensAvatar.onerror = function () { 
   console.log('user does not have an ensAvatar')
   ensAvatar.style.display = 'none' 
@@ -40,7 +50,22 @@ async function checkWalletIsConnected () {
   }
 }
 
+document.querySelector('.disconnect').addEventListener('click', () => {
+  disconnectBtn.classList.toggle('show');
+});
+
+function signOut () {
+  location.reload();
+}
+
 async function signInWithEthereum () {
+  const network = await signer.provider.getNetwork();
+
+  if(network.chainId !== 1) {
+    document.querySelector('.alert').style.display = 'flex';
+    return
+  }
+
   const action = 'signIn'
 
   const message = createSiweMessage(await signer.getAddress(), 'Sign in with Ethereum to the app.')
@@ -66,11 +91,32 @@ async function signInWithEthereum () {
         const ensName = await provider.lookupAddress(address)
         input.value = await response.text()
         siweBtn.style.display = 'none'
-        appDiv.style.display = 'block'
+        appDiv.style.display = 'flex';
+        loggedWrap.style.display = 'flex';
+        changedText.innerHTML = 'Try typing in and saving some text!'
+
         if (ensName === null) {
-          loggedInUser.innerHTML = `Logged in as: ${address}`
+          const copyBtn = document.createElement('span');
+
+          copyBtn.onclick = function() {
+            navigator.clipboard.writeText(address)
+          }
+
+          copyBtn.innerHTML =  '';
+          copyBtn.classList.add('logged-in__img');
+
+          loggedInUser.appendChild(copyBtn);
+
+          const addressElement = document.createElement('span');
+          addressElement.innerHTML = `${address.slice(0,5)} ... ${address.slice(-4)}`
+          addressElement.classList.add('logged-in__adress');
+
+          loggedInUser.appendChild(addressElement);
+           
+          loggedWrapImg.style.display = 'none'
+
         } else {
-          loggedInUser.innerHTML = `Logged in as: ${ensName}`
+          loggedInUser.innerHTML = `${ensName}`
           provider.getAvatar(ensName).then(uri => {ensAvatar.src = uri})
         }
       }, () => console.log('failed to get active address'))
