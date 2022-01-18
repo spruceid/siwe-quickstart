@@ -116,7 +116,7 @@ async function signInWithEthereum () {
 
         } else {
           loggedInUser.innerHTML = `${ensName}`
-          ensAvatar.src = `https://metadata.ens.domains/mainnet/avatar/${ensName}`
+          provider.getAvatar(ensName).then(uri => {ensAvatar.src = uri})
         }
       }, () => console.log('failed to get active address'))
     } else {
