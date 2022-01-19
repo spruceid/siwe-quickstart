@@ -68,7 +68,7 @@ async function signInWithEthereum () {
 
   const action = 'signIn'
 
-  const message = createSiweMessage(await signer.getAddress(), 'Sign in with Ethereum to the app.')
+  const message = await getSiweMessage(action, await signer.getAddress())
 
   const signature = await signer.signMessage(message)
 
@@ -129,7 +129,7 @@ async function signInWithEthereum () {
 async function load () {
   const action = 'load'
 
-  const message = createSiweMessage(await signer.getAddress(), 'Load your previously saved input.')
+  const message = await getSiweMessage(action, await signer.getAddress())
 
   const signature = await signer.signMessage(message)
 
@@ -154,7 +154,7 @@ async function load () {
 async function save () {
   const action = 'save'
 
-  const message = createSiweMessage(await signer.getAddress(), 'Save your current input.')
+  const message = await getSiweMessage(action, await signer.getAddress())
 
   const signature = await signer.signMessage(message)
 
@@ -174,15 +174,22 @@ async function save () {
   window.fetch('http://localhost:8888', options)
 }
 
-function createSiweMessage (address, statement) {
-  return new SiweMessage({
-    domain,
-    address,
-    statement,
-    uri: 'http://' + domain,
-    version: '1',
-    chainId: '1'
-  }).signMessage()
+function getSiweMessage (action, address) {
+  const headers = new window.Headers()
+  headers.append('Accept', 'text/plain')
+
+  const options = {
+    body: JSON.stringify({
+      action,
+      address,
+      requestMessage: true
+    }),
+    headers: headers,
+    method: 'post'
+  }
+
+  return window.fetch('http://localhost:8888', options)
+    .then(response => response.text())
 }
 
 checkWalletIsConnected()
