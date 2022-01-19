@@ -2,6 +2,13 @@ const http = require('http')
 const fs = require('fs')
 const siwe = require('siwe')
 
+const messageStore = {}
+const statements = {
+  'load': 'Load your previously saved input.',
+  'save': 'Save your current input.',
+  'signIn': 'Sign-in with Ethereum.'
+}
+
 // make sure the data directory exists
 try {
   const stat = fs.statSync('data')
@@ -76,10 +83,28 @@ async function signIn (response, payload) {
   }
 }
 
-function parseAndValidateSiweMessage (rawMessage, signature) {
-  const message = new siwe.SiweMessage(rawMessage)
+function parseAndValidateSiweMessage (messageText, signature) {
+  const message = new siwe.SiweMessage(messageText)
+  if (messageText !== messageStore[message.nonce]) {
+    return Promise.reject('received message did not match stored message')
+  }
   message.signature = signature
   return message.validate()
+}
+
+function createSiweMessage (address, statement) {
+  const message = new siwe.SiweMessage({
+    domain: "localhost",
+    address,
+    statement,
+    uri: 'http://localhost',
+    version: '1',
+    chainId: '1'
+  })
+  const messageText = message.signMessage()
+  const nonce = message.nonce
+  messageStore[nonce] = messageText
+  return messageText
 }
 
 function qualify (fileName) {
@@ -119,6 +144,26 @@ http.createServer((request, response) => {
     // once all the data is received we can parse the request
     request.on('end', () => {
       const payload = JSON.parse(body)
+
+      if (payload.requestMessage === true) {
+        const statement = statements[payload.action]
+        if (statement) {
+          const message = createSiweMessage(payload.address, statement)
+          response
+            .writeHead(200, {
+              'Content-Type': 'text/plain',
+              'Access-Control-Allow-Origin': '*'
+            })
+            .end(message)
+        } else {
+          response
+            .writeHead(400, {
+              'Access-Control-Allow-Origin': '*'
+            })
+            .end()
+        }
+        return
+      }
 
       // if the action is load, read the data currently in the
       // local file and send it to the frontend
