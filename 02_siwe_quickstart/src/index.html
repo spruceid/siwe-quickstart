@@ -11,20 +11,56 @@
 </head>
 
 <body class="body" style="background-image: url('/images/bg-image.png')">
+  <div class="alert">
+    <div class="alert-text">
+      You use wrong network, connect to Ethereum to Continue
+    </div>
+  </div>
   <div class="wrap">
-
     <div class="wrap-connect">
-      <div class="app" id='app'>
-        <div class="text-field">
-          <textarea class="text-field__input" id='input' placeholder="Type something in here and save it!"
-            type='text'></textarea>
+      <div class="text-center">
+        <div class="logo">
+          <img src="/images/logo.svg" alt="#">
         </div>
-        <div class="btn-wrap__small">
-          <button class="app-btn" id='saveBtn'>save</button>
-          <button class="app-btn" id='loadBtn'>load</button>
+        <h1>Sign-In with Ethereum Quickstart</h1>
+        <p class="changed-text">Connect Your Wallet and Sign-In with Ethereum to Continue</p>
+      </div>
+
+      <div class="btn-wrap">
+        <button class="btn btn-connect" id='connectWalletBtn'>Connect wallet</button>
+        <button class="btn btn-connect" id='siweBtn' style="display:none">
+          <div class="flex">
+            <span><img src="/images/ethereum-btn.png" alt="#"></span>
+            Sign-in with Ethereum
+          </div>
+        </button>
+
+        <div class="logged-wrap">
+          <div class="logged-wrap__top">
+            <div class="logged-wrap__name">
+              <h2 id='loggedInUser'></h2>
+              <img id='ensAvatar' class="logged-wrap__img"></img>
+            </div>
+            <div class="disconnect">
+              <img src="/images/settings.png" class="disconnect-img" alt="#">
+              <div class="disconnect-btn">
+                Disconnect
+              </div>
+            </div>
+          </div>
+          <div class="app" id='app' style="display:none">
+            <div class="text-field">
+              <textarea class="text-field__input" id='input' placeholder="Type something in here and save it!" type='text'></textarea>
+            </div>
+            <div class="btn-wrap__small">
+              <button class="app-btn" id='saveBtn'>save</button>
+              <button class="app-btn" id='loadBtn'>load</button>
+            </div>
+          </div>
         </div>
       </div>
     </div>
+
   </div>
 </body>
 
