@@ -31,6 +31,7 @@ app.get('/personal_information', function(req, res) {
     }
 
     console.log("User is authenticated!");
+    res.setHeader('Content-Type', 'text/plain');
     res.send(`You are authenticated and your address is: ${req.session.siwe.address}`)
 });
 
@@ -53,20 +54,10 @@ app.post('/sign_in', async function(req, res) {
         }
         req.session.siwe = fields;
         req.session.cookie.expires = new Date(fields.expirationTime);
-        req.session.save(() =>
-            res
-                .status(200)
-                .json({
-                    text: getText(req.session.siwe.address),
-                    address: req.session.siwe.address,
-                    ens: req.session.ens,
-                })
-                .end(),
-        );
+        req.session.save(() => res.status(200).end());
     } catch (e) {
         req.session.siwe = null;
         req.session.nonce = null;
-        req.session.ens = null;
         console.error(e);
         switch (e) {
             case ErrorTypes.EXPIRED_MESSAGE: {

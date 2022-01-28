@@ -10,7 +10,7 @@ const BACKEND_ADDR = "http://localhost:3000";
 
 async function createSiweMessage(address, statement) {
     const res = await fetch(`${BACKEND_ADDR}/nonce`, {
-        credentials: 'same-origin',
+        credentials: 'include',
     });
     const message = new SiweMessage({
         domain,
