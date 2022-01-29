@@ -23,6 +23,11 @@ async function createSiweMessage(address, statement) {
     return message.prepareMessage();
 }
 
+function connectWallet() {
+    provider.send('eth_requestAccounts', [])
+        .catch(() => console.log('user rejected request'));
+}
+
 async function signInWithEthereum() {
     const message = await createSiweMessage(
         await signer.getAddress(),
@@ -48,7 +53,9 @@ async function getInformation() {
     console.log(await res.text());
 }
 
+const connectWalletBtn = document.getElementById('connectWalletBtn');
 const siweBtn = document.getElementById('siweBtn');
 const infoBtn = document.getElementById('infoBtn');
+connectWalletBtn.onclick = connectWallet;
 siweBtn.onclick = signInWithEthereum;
 infoBtn.onclick = getInformation;
