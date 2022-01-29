@@ -7,7 +7,6 @@ const provider = new ethers.providers.Web3Provider(window.ethereum);
 const signer = provider.getSigner();
 
 const BACKEND_ADDR = "http://localhost:3000";
-
 async function createSiweMessage(address, statement) {
     const res = await fetch(`${BACKEND_ADDR}/nonce`, {
         credentials: 'include',
@@ -36,7 +35,7 @@ async function signInWithEthereum() {
     );
     const signature = await signer.signMessage(message);
 
-    const res = await fetch(`${BACKEND_ADDR}/sign_in`, {
+    const res = await fetch(`${BACKEND_ADDR}/verify`, {
         method: "POST",
         headers: {
             'Content-Type': 'application/json',

@@ -1,15 +1,15 @@
-import { SiweMessage, generateNonce } from 'siwe';
-import bodyParser from 'body-parser';
 import cors from 'cors';
 import express from 'express';
 import Session from 'express-session';
+import { generateNonce, SiweMessage } from 'siwe';
 
 const app = express();
-app.use(bodyParser.json());
+app.use(express.json());
 app.use(cors({
     origin: 'http://localhost:8080',
     credentials: true,
 }))
+
 app.use(Session({
     name: 'siwe-quickstart',
     secret: "siwe-quickstart-secret",
@@ -18,24 +18,13 @@ app.use(Session({
     cookie: { secure: false, sameSite: true }
 }));
 
-app.get('/nonce', async function(req, res) {
+app.get('/nonce', async function (req, res) {
     req.session.nonce = generateNonce();
     res.setHeader('Content-Type', 'text/plain');
     res.status(200).send(req.session.nonce);
 });
 
-app.get('/personal_information', function(req, res) {
-    if (!req.session.siwe) {
-        res.status(401).json({ message: 'You have to first sign_in' });
-        return;
-    }
-
-    console.log("User is authenticated!");
-    res.setHeader('Content-Type', 'text/plain');
-    res.send(`You are authenticated and your address is: ${req.session.siwe.address}`)
-});
-
-app.post('/sign_in', async function(req, res) {
+app.post('/verify', async function (req, res) {
     try {
         if (!req.body.message) {
             res.status(422).json({ message: 'Expected prepareMessage object as body.' });
@@ -43,8 +32,7 @@ app.post('/sign_in', async function(req, res) {
         }
 
         let message = new SiweMessage(req.body.message);
-        message.signature = req.body.signature;
-        const fields = await message.validate();
+        const fields = await message.validate(req.body.signature);
         if (fields.nonce !== req.session.nonce) {
             console.log(req.session);
             res.status(422).json({
@@ -74,6 +62,16 @@ app.post('/sign_in', async function(req, res) {
             }
         }
     }
+});
+
+app.get('/personal_information', function (req, res) {
+    if (!req.session.siwe) {
+        res.status(401).json({ message: 'You have to first sign_in' });
+        return;
+    }
+    console.log("User is authenticated!");
+    res.setHeader('Content-Type', 'text/plain');
+    res.send(`You are authenticated and your address is: ${req.session.siwe.address}`)
 });
 
 app.listen(3000);
