@@ -38,7 +38,7 @@ app.get('/personal_information', function(req, res) {
 app.post('/sign_in', async function(req, res) {
     try {
         if (!req.body.message) {
-            res.status(422).json({ message: 'Expected signMessage object as body.' });
+            res.status(422).json({ message: 'Expected prepareMessage object as body.' });
             return;
         }
 
