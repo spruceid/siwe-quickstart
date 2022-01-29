@@ -11,11 +11,11 @@ app.get('/nonce', function (_, res) {
     res.send(generateNonce());
 });
 
-app.post('/verify', function (req, res) {
+app.post('/verify', async function (req, res) {
     const { message, signature } = req.body;
     const siweMessage = new SiweMessage(message);
     try {
-        siweMessage.validate(signature);
+        await siweMessage.validate(signature);
         res.send(true);
     } catch {
         res.send(false);
