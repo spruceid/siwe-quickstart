@@ -19,7 +19,7 @@ async function createSiweMessage(address, statement) {
         chainId: '1',
         nonce: await res.text()
     });
-    return message.signMessage();
+    return message.prepareMessage();
 }
 
 function connectWallet() {

@@ -30,6 +30,6 @@
   },
   "dependencies": {
     "ethers": "^5.5.3",
-    "siwe": "^0.1.4"
+    "siwe": "^1.0.0"
   }
 }
