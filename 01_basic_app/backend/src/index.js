@@ -5,10 +5,10 @@ import express from 'express';
 
 const app = express();
 app.use(bodyParser.json());
-app.use(cors())
+app.use(cors());
 
 app.get('/nonce', function(_, res) {
-    res.setHeader('Content-Type', 'text/plain')
+    res.setHeader('Content-Type', 'text/plain');
     res.send(generateNonce());
 })
 
