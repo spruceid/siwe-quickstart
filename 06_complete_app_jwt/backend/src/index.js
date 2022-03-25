@@ -17,13 +17,6 @@ app.use(cors({
     credentials: true,
 }));
 
-const generateNonceToken = () => {
-    let payload =  {
-        'nonce': generateNonce()
-    }
-    return jwt.sign(payload, process.env.TOKEN_SECRET, { expiresIn: '600s' });
-}
-
 const authenticate = (req, res, next) => {
     try {
         req.user = jwt.verify(req.cookies.siweSecure, process.env.TOKEN_SECRET);
@@ -36,9 +29,10 @@ const authenticate = (req, res, next) => {
 }
 
 app.get('/nonce', async (req, res) => {
-    let nonce = generateNonceToken();
+    const payload =  { 'nonce': generateNonce() }
+    const nonce_jwt = jwt.sign(payload, process.env.TOKEN_SECRET, { expiresIn: '600s' });
     res.setHeader('Content-Type', 'text/plain');
-    res.status(200).send(nonce);
+    res.status(200).send(nonce_jwt);
 });
 
 app.post('/verify', async (req, res) => {
