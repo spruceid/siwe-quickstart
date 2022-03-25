@@ -27,11 +27,6 @@ const generateNonceToken = () => {
 }
 
 const authenticate = (req, res, next) => {
-    if (!req.cookies || !req.cookies.siweSecure) {
-        res.status(403).send();
-        return; 
-    }
-
     try {
         req.user = jwt.verify(req.cookies.siweSecure, process.env.TOKEN_SECRET);
     } catch(e) {
@@ -69,12 +64,12 @@ app.post('/verify', async (req, res) => {
             return;
         }
         // TODO: align jwt and siwe expiration times
-        const wallet_token = jwt.sign(
+        const siwe_jwt = jwt.sign(
             {...fields},
             process.env.TOKEN_SECRET,
             { expiresIn: TOKEN_EXPIRATION_SECONDS });
 
-        res.cookie('siweSecure', wallet_token, {
+        res.cookie('siweSecure', siwe_jwt, {
             maxAge: TOKEN_EXPIRATION_SECONDS * 1000,
             httpOnly: true, // httpOnly true to ensure authenticity of tokens
             secure: false // set this to true in production
@@ -84,15 +79,15 @@ app.post('/verify', async (req, res) => {
         console.error(e);
         switch (e) {
             case ErrorTypes.EXPIRED_MESSAGE: {
-                req.session.save(() => res.status(440).json({ message: e.message }));
+                res.status(440).json({ message: e.message });
                 break;
             }
             case ErrorTypes.INVALID_SIGNATURE: {
-                req.session.save(() => res.status(422).json({ message: e.message }));
+                res.status(422).json({ message: e.message });
                 break;
             }
             default: {
-                req.session.save(() => res.status(500).json({ message: e.message }));
+                res.status(500).json({ message: e.message });
                 break;
             }
         }
