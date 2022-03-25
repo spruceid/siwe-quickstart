@@ -1,52 +1,86 @@
 import cors from 'cors';
 import express from 'express';
-import Session from 'express-session';
+import jwt from 'jsonwebtoken';
+import dotenv from 'dotenv';
+import cookieParser from 'cookie-parser';
 import { generateNonce, SiweMessage } from 'siwe';
+
+dotenv.config();
+
+const TOKEN_EXPIRATION_SECONDS = 86400;
 
 const app = express();
 app.use(express.json());
+app.use(cookieParser());
 app.use(cors({
     origin: 'http://localhost:8080',
+    // exclude TRACE and TRACK methods to avoid XST attacks
+    methods: ['GET', 'POST', 'OPTIONS', 'PUT', 'PATCH', 'DELETE'],
     credentials: true,
-}))
-
-app.use(Session({
-    name: 'siwe-quickstart',
-    secret: "siwe-quickstart-secret",
-    resave: true,
-    saveUninitialized: true,
-    cookie: { secure: false, sameSite: true }
 }));
 
+const generateNonceToken = () => {
+    let payload =  {
+        'nonce': generateNonce()
+    }
+    return jwt.sign(payload, process.env.TOKEN_SECRET, { expiresIn: '600s' });
+}
 
-app.get('/nonce', async function (req, res) {
-    req.session.nonce = generateNonce();
+const authenticate = (req, res, next) => {
+    if (!req.cookies || !req.cookies.siweSecure) {
+        res.status(403).send();
+        return; 
+    }
+
+    try {
+        req.user = jwt.verify(req.cookies.siweSecure, process.env.TOKEN_SECRET);
+    } catch(e) {
+        console.log(e);
+        res.status(403).send();
+        return;
+    }
+
+    next();
+}
+
+app.get('/nonce', async (req, res) => {
+    let nonce = generateNonceToken();
     res.setHeader('Content-Type', 'text/plain');
-    res.status(200).send(req.session.nonce);
+    res.status(200).send(nonce);
 });
 
-app.post('/verify', async function (req, res) {
+app.post('/verify', async (req, res) => {
     try {
         if (!req.body.message) {
-            res.status(422).json({ message: 'Expected prepareMessage object as body.' });
+            res.status(422).json({
+                message: 'Expected prepareMessage object as body.'
+            });
             return;
         }
 
-        let message = new SiweMessage(req.body.message);
+        const message = new SiweMessage(req.body.message);
         const fields = await message.validate(req.body.signature);
-        if (fields.nonce !== req.session.nonce) {
-            console.log(req.session);
+        const decoded = jwt.verify(req.body.nonce_jwt, process.env.TOKEN_SECRET);
+
+        if (fields.nonce !== decoded.nonce) {
             res.status(422).json({
                 message: `Invalid nonce.`,
             });
             return;
         }
-        req.session.siwe = fields;
-        req.session.cookie.expires = new Date(fields.expirationTime);
-        req.session.save(() => res.status(200).end());
+        // TODO: align jwt and siwe expiration times
+        const wallet_token = jwt.sign(
+            {...fields},
+            process.env.TOKEN_SECRET,
+            { expiresIn: TOKEN_EXPIRATION_SECONDS });
+
+        res.cookie('siweSecure', wallet_token, {
+            maxAge: TOKEN_EXPIRATION_SECONDS * 1000,
+            httpOnly: true, // httpOnly true to ensure authenticity of tokens
+            secure: false // set this to true in production
+        }).status(200).send();
+
     } catch (e) {
-        req.session.siwe = null;
-        req.session.nonce = null;
         console.error(e);
         switch (e) {
             case ErrorTypes.EXPIRED_MESSAGE: {
@@ -65,14 +99,10 @@ app.post('/verify', async function (req, res) {
     }
 });
 
-app.get('/personal_information', function (req, res) {
-    if (!req.session.siwe) {
-        res.status(401).json({ message: 'You have to first sign_in' });
-        return;
-    }
+app.get('/personal_information', authenticate, (req, res) => {
     console.log("User is authenticated!");
     res.setHeader('Content-Type', 'text/plain');
-    res.send(`You are authenticated and your address is: ${req.session.siwe.address}`)
+    res.send(`You are authenticated and your address is: ${req.user.address}`);
 });
 
 app.listen(3000);

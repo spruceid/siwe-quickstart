@@ -10,9 +10,10 @@
   "author": "",
   "license": "MIT",
   "dependencies": {
+    "cookie-parser": "^1.4.6",
     "cors": "^2.8.5",
+    "dotenv": "^16.0.0",
     "express": "^4.17.2",
-    "express-session": "^1.17.2",
     "siwe": "^1.0.0"
   }
 }
