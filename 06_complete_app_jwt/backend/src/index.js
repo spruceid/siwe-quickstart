@@ -7,8 +7,6 @@ import { generateNonce, SiweMessage } from 'siwe';
 
 dotenv.config();
 
-const TOKEN_EXPIRATION_SECONDS = 86400;
-
 const app = express();
 app.use(express.json());
 app.use(cookieParser());
@@ -34,7 +32,6 @@ const authenticate = (req, res, next) => {
         res.status(403).send();
         return;
     }
-
     next();
 }
 
@@ -67,10 +64,10 @@ app.post('/verify', async (req, res) => {
         const siwe_jwt = jwt.sign(
             {...fields},
             process.env.TOKEN_SECRET,
-            { expiresIn: TOKEN_EXPIRATION_SECONDS });
+            { expiresIn: process.env.TOKEN_EXPIRATION_SECONDS });
 
         res.cookie('siweSecure', siwe_jwt, {
-            maxAge: TOKEN_EXPIRATION_SECONDS * 1000,
+            maxAge: process.env.TOKEN_EXPIRATION_SECONDS * 1000,
             httpOnly: true, // httpOnly true to ensure authenticity of tokens
             secure: false // set this to true in production
         }).status(200).send();
