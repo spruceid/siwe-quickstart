@@ -54,7 +54,7 @@ app.post('/verify', async (req, res) => {
             });
             return;
         }
-        // TODO: align jwt and siwe expiration times
+
         const siwe_jwt = jwt.sign(
             {...fields},
             process.env.TOKEN_SECRET,
