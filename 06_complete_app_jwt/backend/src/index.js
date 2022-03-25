@@ -3,7 +3,7 @@ import express from 'express';
 import jwt from 'jsonwebtoken';
 import dotenv from 'dotenv';
 import cookieParser from 'cookie-parser';
-import { generateNonce, SiweMessage } from 'siwe';
+import { generateNonce, SiweMessage, ErrorTypes } from 'siwe';
 
 dotenv.config();
 
