@@ -14,12 +14,8 @@ app.get('/nonce', function (_, res) {
 app.post('/verify', async function (req, res) {
     const { message, signature } = req.body;
     const siweMessage = new SiweMessage(message);
-    try {
-        await siweMessage.verify({ signature });
-        res.send(true);
-    } catch {
-        res.send(false);
-    }
+    const { success } = await siweMessage.verify({ signature });
+    res.send(success);
 });
 
 app.listen(3000);

@@ -10,8 +10,9 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "buffer": "^6.0.3",
     "ethers": "^5.5.3",
-    "siwe": "^1.0.0"
+    "siwe": "^2.0.2"
   },
   "devDependencies": {
     "html-webpack-plugin": "^5.5.0",
