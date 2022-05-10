@@ -1,5 +1,6 @@
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const webpack = require('webpack');
 
 module.exports = {
   mode: 'development',
@@ -8,7 +9,8 @@ module.exports = {
     fallback: {
       fs: false,
       path: false,
-      util: false
+      util: false,
+      buffer: require.resolve("buffer/"),
     }
   },
   output: {
@@ -20,6 +22,9 @@ module.exports = {
     new HtmlWebpackPlugin({
       template: './src/index.html',
       filename: 'index.html'
+    }),
+    new webpack.ProvidePlugin({
+      Buffer: ['buffer', 'Buffer'],
     }),
   ]
 };
