@@ -10,6 +10,6 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "siwe": "^2.0.2"
+    "siwe": "^2.0.3"
   }
 }
