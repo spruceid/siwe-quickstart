@@ -13,7 +13,7 @@ function createSiweMessage(address, statement) {
         statement,
         uri: origin,
         version: '1',
-        chainId: '1'
+        chainId: 1
     });
     return message.prepareMessage();
 }
