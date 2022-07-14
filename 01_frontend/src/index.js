@@ -1,5 +1,5 @@
 import { ethers } from 'ethers';
-import { SiweMessage } from 'siwe';
+import { generateNonce, SiweMessage } from 'siwe';
 
 const domain = window.location.host;
 const origin = window.location.origin;
@@ -13,7 +13,8 @@ function createSiweMessage(address, statement) {
         statement,
         uri: origin,
         version: '1',
-        chainId: '1'
+        chainId: '1',
+        nonce: generateNonce(),
     });
     return message.prepareMessage();
 }

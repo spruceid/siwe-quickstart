@@ -25,43 +25,26 @@ app.get('/nonce', async function (req, res) {
 });
 
 app.post('/verify', async function (req, res) {
-    try {
-        if (!req.body.message) {
-            res.status(422).json({ message: 'Expected prepareMessage object as body.' });
-            return;
-        }
-
-        let message = new SiweMessage(req.body.message);
-        const fields = await message.validate(req.body.signature);
-        if (fields.nonce !== req.session.nonce) {
-            console.log(req.session);
-            res.status(422).json({
-                message: `Invalid nonce.`,
-            });
-            return;
-        }
-        req.session.siwe = fields;
-        req.session.cookie.expires = new Date(fields.expirationTime);
-        req.session.save(() => res.status(200).end());
-    } catch (e) {
-        req.session.siwe = null;
-        req.session.nonce = null;
-        console.error(e);
-        switch (e) {
-            case ErrorTypes.EXPIRED_MESSAGE: {
-                req.session.save(() => res.status(440).json({ message: e.message }));
-                break;
-            }
-            case ErrorTypes.INVALID_SIGNATURE: {
-                req.session.save(() => res.status(422).json({ message: e.message }));
-                break;
-            }
-            default: {
-                req.session.save(() => res.status(500).json({ message: e.message }));
-                break;
-            }
-        }
+    if (!req.body.message) {
+        res.status(422).json({ message: 'Expected prepareMessage object as body.' });
+        return;
     }
+
+    let message = new SiweMessage(req.body.message);
+    const result = await message.verify({
+        signature: req.body.signature,
+        nonce: req.session.nonce,
+        domain: 'localhost:8080',
+    });
+
+    if (!result.success) {
+        res.status(422).json(result.error);
+        return;
+    }
+
+    req.session.siwe = result.data;
+    req.session.cookie.expires = new Date(result.data.expirationTime);
+    req.session.save(() => res.status(200).end());
 });
 
 app.get('/personal_information', function (req, res) {
