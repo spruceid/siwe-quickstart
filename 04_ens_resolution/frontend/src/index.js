@@ -68,7 +68,9 @@ async function getENSMetadata(ensName) {
     for (let i = 0, x = domains.length; i < x; i++) {
         let domain = domains[i];
         if (domain.name === ensName) {
-            textKeys = domain.resolver.texts;
+            if (domain.resolver?.texts) {
+                textKeys.push(domain.resolver.texts);
+            }
             break;
         }
     }
