@@ -1,10 +1,9 @@
-import { ethers } from 'ethers';
+import { BrowserProvider } from 'ethers';
 import { SiweMessage } from 'siwe';
 
 const domain = window.location.host;
 const origin = window.location.origin;
-const provider = new ethers.providers.Web3Provider(window.ethereum);
-const signer = provider.getSigner();
+const provider = new BrowserProvider(window.ethereum);
 
 const BACKEND_ADDR = "http://localhost:3000";
 async function createSiweMessage(address, statement) {
@@ -29,6 +28,8 @@ function connectWallet() {
 }
 
 async function signInWithEthereum() {
+    const signer = await provider.getSigner();
+
     const message = await createSiweMessage(
         await signer.getAddress(),
         'Sign in with Ethereum to the app.'

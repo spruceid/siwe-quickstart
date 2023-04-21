@@ -1,22 +1,23 @@
 {
-  "name": "frontend",
+  "name": "01_frontend",
   "version": "1.0.0",
-  "description": "",
   "main": "index.js",
+  "license": "MIT",
   "scripts": {
-    "dev": "webpack serve"
+    "start": "webpack serve"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
   "dependencies": {
-    "ethers": "^5.5.4",
-    "siwe": "^1.0.0"
+    "siwe": "^2.1.4",
+    "ethers": "^6.3.0",
+    "node-polyfill-webpack-plugin": "^2.0.1",
+    "webpack-node-externals": "^3.0.0"
   },
   "devDependencies": {
-    "html-webpack-plugin": "^5.5.0",
-    "webpack": "^5.67.0",
-    "webpack-cli": "^4.9.2",
-    "webpack-dev-server": "^4.7.3"
+    "bufferutil": "^4.0.7",
+    "html-webpack-plugin": "^5.5.1",
+    "utf-8-validate": "^6.0.3",
+    "webpack": "^5.80.0",
+    "webpack-cli": "^5.0.1",
+    "webpack-dev-server": "^4.13.3"
   }
 }

@@ -31,18 +31,12 @@ app.post('/verify', async function (req, res) {
             return;
         }
 
-        let message = new SiweMessage(req.body.message);
-        const fields = await message.validate(req.body.signature);
-        if (fields.nonce !== req.session.nonce) {
-            console.log(req.session);
-            res.status(422).json({
-                message: `Invalid nonce.`,
-            });
-            return;
-        }
-        req.session.siwe = fields;
-        req.session.cookie.expires = new Date(fields.expirationTime);
-        req.session.save(() => res.status(200).end());
+        let SIWEObject = new SiweMessage(req.body.message);
+        const { data: message } = await SIWEObject.verify({ signature: req.body.signature, nonce: req.session.nonce });
+
+        req.session.siwe = message;
+        req.session.cookie.expires = new Date(message.expirationTime);
+        req.session.save(() => res.status(200).send(true));
     } catch (e) {
         req.session.siwe = null;
         req.session.nonce = null;
@@ -71,7 +65,7 @@ app.get('/personal_information', function (req, res) {
     }
     console.log("User is authenticated!");
     res.setHeader('Content-Type', 'text/plain');
-    res.send(`You are authenticated and your address is: ${req.session.siwe.address}`)
+    res.send(`You are authenticated and your address is: ${req.session.siwe.address}`);
 });
 
 app.listen(3000);
