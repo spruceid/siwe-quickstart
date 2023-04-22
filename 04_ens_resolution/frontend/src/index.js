@@ -1,10 +1,9 @@
-import { ethers } from 'ethers';
+import { BrowserProvider } from 'ethers';
 import { SiweMessage } from 'siwe';
 
 const domain = window.location.host;
 const origin = window.location.origin;
-const provider = new ethers.providers.Web3Provider(window.ethereum);
-const signer = provider.getSigner();
+const provider = new BrowserProvider(window.ethereum);
 
 const profileElm = document.getElementById('profile');
 const noProfileElm = document.getElementById('noProfile');
@@ -13,9 +12,6 @@ const welcomeElm = document.getElementById('welcome');
 const ensLoaderElm = document.getElementById('ensLoader');
 const ensContainerElm = document.getElementById('ensContainer');
 const ensTableElm = document.getElementById('ensTable');
-
-const ensAddr = "https://api.thegraph.com/subgraphs/name/ensdomains/ens";
-const tablePrefix = `<tr><th>ENS Text Key</th><th>Value</th></tr>`;
 
 let address;
 
@@ -41,49 +37,8 @@ function connectWallet() {
         .catch(() => console.log('user rejected request'));
 }
 
-async function getENSMetadata(ensName) {
-    const body = JSON.stringify({
-        query: `{
-    domains(where:{ name: "${ensName}" }) {
-        name
-        resolver {
-            texts
-        }
-    }
-}`
-    });
-
-    let res = await fetch(ensAddr, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body
-    });
-
-    const wrapper = await res.json();
-    const {data} = wrapper;
-    const {domains} = data;
-    let textKeys = [];
-    for (let i = 0, x = domains.length; i < x; i++) {
-        let domain = domains[i];
-        if (domain.name === ensName) {
-            textKeys = domain.resolver.texts;
-            break;
-        }
-    }
-
-    const resolver = await provider.getResolver(ensName);
-
-    let nextProfile = `<tr><td>name:</td><td>${ensName}</td></tr>`;
-    for (let i = 0, x = textKeys.length; i < x; i++) {
-        nextProfile += `<tr><td>${textKeys[i]}:</td><td>${await resolver.getText(textKeys[i])}</td></tr>`
-    }
-
-    return tablePrefix + nextProfile
-}
-
 async function signInWithEthereum() {
+    const signer = await provider.getSigner();
     profileElm.classList = 'hidden';
     noProfileElm.classList = 'hidden';
     welcomeElm.classList = 'hidden';
@@ -142,7 +97,13 @@ async function displayENSProfile() {
         }
 
         ensLoaderElm.innerHTML = 'Loading...';
-        ensTableElm.innerHTML = await getENSMetadata(ensName);
+        ensTableElm.innerHTML.concat(`<tr><th>ENS Text Key</th><th>Value</th></tr>`);
+        const resolver = await provider.getResolver(ensName);
+
+        const keys = ["email", "url", "description", "com.twitter"];
+        ensTableElm.innerHTML += `<tr><td>name:</td><td>${ensName}</td></tr>`;
+        for (const key of keys)
+            ensTableElm.innerHTML += `<tr><td>${key}:</td><td>${await resolver.getText(key)}</td></tr>`;
         ensLoaderElm.innerHTML = '';
         ensContainerElm.classList = '';
     } else {
