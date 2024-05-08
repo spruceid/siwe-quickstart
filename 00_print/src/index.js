@@ -1,10 +1,12 @@
 const siwe = require('siwe');
 
+const scheme = "https";
 const domain = "localhost";
 const origin = "https://localhost/login";
 
 function createSiweMessage(address, statement) {
     const siweMessage = new siwe.SiweMessage({
+        scheme,
         domain,
         address,
         statement,

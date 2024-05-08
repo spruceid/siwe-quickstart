@@ -7,7 +7,7 @@
     "start": "webpack serve"
   },
   "dependencies": {
-    "siwe": "^2.1.4",
+    "siwe": "^2.3.2",
     "ethers": "^6.3.0",
     "node-polyfill-webpack-plugin": "^2.0.1",
     "webpack-node-externals": "^3.0.0"
