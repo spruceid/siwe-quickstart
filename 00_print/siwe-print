@@ -1,0 +1,4 @@
+mkdir siwe-print && cd siwe-print/
+yarn init --yes
+yarn add siwe ethers
+mkdir src/
