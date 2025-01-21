@@ -20,9 +20,11 @@ const nftContainerElm = document.getElementById('nftContainer');
 const nftTableElm = document.getElementById('nftTable');
 
 let address;
+let chain;
 
 const BACKEND_ADDR = "http://localhost:3000";
 async function createSiweMessage(address, statement) {
+    chain = (await provider.getNetwork()).name
     const res = await fetch(`${BACKEND_ADDR}/nonce`, {
         credentials: 'include',
     });
@@ -76,21 +78,21 @@ async function displayENSProfile() {
 
 async function getNFTs() {
     try {
-        let res = await fetch(`https://api.opensea.io/api/v1/assets?owner=${address}`);
+        let res = await fetch(`https://testnets-api.opensea.io/api/v2/chain/${chain}/account/${address}/nfts`);
         if (!res.ok) {
             throw new Error(res.statusText)
         }
 
         let body = await res.json();
 
-        if (!body.assets || !Array.isArray(body.assets) || body.assets.length === 0) {
+        if (!body.nfts || !Array.isArray(body.nfts) || body.nfts.length === 0) {
             return []
         }
 
-        return body.assets.map((asset) => {
-            let {name, asset_contract, token_id} = asset;
-            let {address} = asset_contract;
-            return {name, address, token_id};
+        return body.nfts.map((asset) => {
+            let {name, contract, collection} = asset;
+            let address = contract;
+            return {name, address, collection};
         });
     } catch (err) {
         console.error(`Failed to resolve nfts: ${err.message}`);
@@ -110,7 +112,7 @@ async function displayNFTs() {
 
     let tableHtml = "<tr><th>Name</th><th>Address</th><th>Token ID</th></tr>";
     nfts.forEach((nft) => {
-        tableHtml += `<tr><td>${nft.name}</td><td>${nft.address}</td><td>${nft.token_id}</td></tr>`
+        tableHtml += `<tr><td>${nft.name}</td><td>${nft.address}</td><td>${nft.collection}</td></tr>`
     });
 
     nftTableElm.innerHTML = tableHtml;

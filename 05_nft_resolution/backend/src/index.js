@@ -35,7 +35,11 @@ app.post('/verify', async function (req, res) {
         const { data: message } = await SIWEObject.verify({ signature: req.body.signature, nonce: req.session.nonce });
 
         req.session.siwe = message;
-        req.session.cookie.expires = new Date(message.expirationTime);
+
+        if(message.expirationTime) {
+            req.session.cookie.expires = new Date(message.expirationTime);
+        }
+
         req.session.save(() => res.status(200).send(true));
     } catch (e) {
         req.session.siwe = null;
